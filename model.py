@@ -5,10 +5,9 @@ import keras.backend as K
 
 
 class FeedForwardRNN:
-    def __init__(self, h_input_shape, x_input_shape, sequence_length):
+    def __init__(self, h_input_shape, x_input_shape):
         self.h_input_dims = h_input_shape
         self.x_input_dims = x_input_shape
-        self.sequence_length = sequence_length
         self.build_model()
         self.h_prev = K.zeros(shape=h_input_shape, name='prev_h')
         self.model = self.build_model()
@@ -39,7 +38,7 @@ class FeedForwardRNN:
     # Possible use cases:
     #  1) one initial state measurement and arbitrary prediction...DONE
     #  2) sparse state measurements, blank states otherwise
-    #  3) 1-to-1 correspondance between number of state measurements and number of time_steps
+    #  3) 1-to-1 correspondence between number of state measurements and number of time_steps
     def predict_future(self, time_steps, initial_state):
         predictions = []
         h_temp = self.h_prev
