@@ -33,5 +33,17 @@ class FeedForwardRNN:
 
     def reset_state(self):
         self.h_prev = K.zeros(shape=self.h_input_dims, name='prev_h')
+        return
 
-
+    def predict_future(self, time_steps, initial_state):
+        predictions = []
+        h_temp = self.h_prev
+        result = self.model({'h0': h_temp, 'x1': initial_state})
+        h_temp = result['h1']
+        predictions.append(result['y1'])
+        masked_input = K.zeros(shape=self.x_input_dims)
+        for i in range(1, time_steps):
+            result = self.model({'h0': h_temp, 'x1': masked_input})
+            h_temp = result['h1']
+            predictions.append(result['y1'])
+        return predictions
