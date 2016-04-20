@@ -11,7 +11,7 @@ def main():
     parser.add_argument('-it', '-iter', default=100000, type=int, action='store', help='the number of training iterations')
     parser.add_argument('-N', default=100, type=int, action='store', help='training sequence length')
     parser.add_argument('-m', '-model', default='model', action='store', help='neural network model')
-    parser.add_argument('-d', '-data', default='data.t7', action='store', help='training data')
+    parser.add_argument('-d', '-data', default='data.t7', action='store', help='training data file')
     parser.add_argument('-lr', '-learningRate', default=0.01, type=float, action='store', help='learning rate')
     parser.add_argument('-iw', '-initweights', default='', action='store', help='initial weights from file')
     args = parser.parse_args()
