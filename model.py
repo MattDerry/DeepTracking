@@ -35,6 +35,11 @@ class FeedForwardRNN:
         self.h_prev = K.zeros(shape=self.h_input_dims, name='prev_h')
         return
 
+    # TODO (Matt): Add check for state measurements and incorporate them when available
+    # Possible use cases:
+    #  1) one initial state measurement and arbitrary prediction...DONE
+    #  2) sparse state measurements, blank states otherwise
+    #  3) 1-to-1 correspondance between number of state measurements and number of time_steps
     def predict_future(self, time_steps, initial_state):
         predictions = []
         h_temp = self.h_prev
