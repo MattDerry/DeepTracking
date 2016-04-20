@@ -1,0 +1,37 @@
+from keras.models import Model
+from keras.layers import Input, Convolution2D, merge
+from keras.optimizers import Adagrad
+import keras.backend as K
+
+
+class FeedForwardRNN:
+    def __init__(self, h_input_shape, x_input_shape, sequence_length):
+        self.h_input_dims = h_input_shape
+        self.x_input_dims = x_input_shape
+        self.sequence_length = sequence_length
+        self.build_model()
+        self.h_prev = K.zeros(shape=h_input_shape, name='prev_h')
+        self.model = self.build_model()
+        return
+
+    def __call__(self, state):
+        result = self.model({'h0': self.h_prev, 'x1': state})
+        self.h_prev = result['h1']
+        return result['y1']
+
+    def build_model(self):
+        h0 = Input(shape=self.h_input_dims)
+        x1 = Input(shape=self.x_input_dims)
+        e = Convolution2D(16, 7, 7, activation='sigmoid', dim_ordering='tf')(x1)
+        j = merge([e, h0], mode='concat', concat_axis=1)
+        h1 = Convolution2D(32, 7, 7, activation='sigmoid', dim_ordering='tf')(j)
+        y1 = Convolution2D(1, 7, 7, activation='sigmoid', dim_ordering='tf')(h1)
+        model = Model(input=[h0, x1], output=[h1, y1])
+        opt = Adagrad(lr=0.01, epsilon=1e-6)
+        model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
+        return model
+
+    def reset_state(self):
+        self.h_prev = K.zeros(shape=self.h_input_dims, name='prev_h')
+
+
