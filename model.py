@@ -1,4 +1,6 @@
-from keras.models import Model
+import json
+
+from keras.models import Model, model_from_json
 from keras.layers import Input, Convolution2D, merge
 from keras.optimizers import Adagrad
 import keras.backend as K
@@ -51,3 +53,25 @@ class FeedForwardRNN:
             h_temp = result['h1']
             predictions.append(result['y1'])
         return predictions
+
+    # The file_name parameter should not include a file extension
+    # since it uses the same name for the json model file and the h5py weights file
+    def save_model_and_weights(self, save_folder_path, file_name):
+        json_model_string = self.model.to_json()
+        config_filename = '%s%s.json' % (save_folder_path, file_name)
+        with open(config_filename, 'w') as model_out:
+            json.dump(json_model_string, model_out)
+        weights_filename = '%s%s.h5' % (save_folder_path, file_name)
+        self.model.save_weights(weights_filename)
+        return
+
+    # The file_name parameter should not include a file extension
+    # since it uses the same name for the json model file and the h5py weights file
+    def load_model_and_weights(self, save_folder_path, file_name):
+        config_filename = '%s%s.json' % (save_folder_path, file_name)
+        with open(config_filename, 'r') as model_in:
+            model_json = json.load(model_in)
+        self.model = model_from_json(model_json)
+        weights_filename = '%s%s.h5' % (save_folder_path, file_name)
+        self.model.load_weights(weights_filename)
+        return

@@ -24,5 +24,19 @@ def main():
     args = parser.parse_args()
     print args
 
+    # Load Data Set - Create Training and Testing Data Split
+
+    # Load Network Model
+
+    # Load Network Weights
+
+    # Define Cost Function
+
+    # Train Model
+
+    # Eval Model
+
+    # Save Model
+
 if __name__ == "__main__":
     main()
